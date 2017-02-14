@@ -73,9 +73,9 @@ end
 %_________________________________________________________
 %
 % YOU NEED TO ADD YOUR CODE HERE
-xn = wav(1:fftSize);
-Y = fft(xn.*window);
-K = fftSize/2+1;
-Xn = Y(1:K);
-output = (abs(freqResponse*Xn)).^2;
+    
+    Y = fft(wav.*window);
+    K = fftSize/2+1;
+    Xn = Y(1:K);
+    output = (abs(freqResponse*Xn)).^2;
 end
