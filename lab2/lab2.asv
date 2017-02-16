@@ -84,7 +84,6 @@ for n = 1:256:(nfs-1)*256
 end
 
 
-
 for i = 1:20
     for j = 1:20
         
