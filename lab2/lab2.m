@@ -5,9 +5,10 @@ clear all;close all;clc;
 % fileName = dir('*.wav');
 % NumSong = size(fileName,1);
 % 
+
 fftSize = 512;
 kw = kaiser(fftSize);
-[song,fs] = audioread('track396-electronic.wav');
+[song,fs] = audioread('track437-jazz.wav');
 % [song,fs] = audioread('track201-classical.wav');
 ExtractedSong = (SongExtract(song,24,fs));
 nf = floor(24*fs/(fftSize/2));
@@ -24,7 +25,7 @@ sim = zeros(nf,nf);
 % for the 12 audio tracks supplied for the rst lab. See Fig. 1 for an example of a similarity matrix.
 % for i = 1:nf
 %     for j = 1:nf
-%         sim(i,j) = mfcc1(:,i)'*mfcc1(:,j)/(norm(mfcc1(:,i))*norm(mfcc1(:,j)));
+%         sim(i,j) = SimilarityMatrix(mfcc1,i,j);
 %     end
 % end
 % figure
@@ -83,10 +84,33 @@ for n = 1:256:(nfs-1)*256
     index = index + 1;
 end
 
+Sim1sec = zeros(nfs,nfs);
 
-
-for i = 1:20
-    for j = 1:20
-        
+for i = 1:nfs
+    for j = 1:nfs
+        Sim1sec(i,j) = SimilarityMatrix(mfcc2,i,j);
     end
 end
+% figure
+% imagesc(Sim1sec)
+% title('Similarity Matrix for 1 seconds')
+% colormap jet 
+% colorbar
+prod = zeros(20,20);
+for m = 1:floor(nfs/20)-1
+    for l = 1:20
+        for i = 1:20
+            for j = 1:20-l+1
+                prod(i,j) = Sim1sec(i+m*20,j+m*20)*Sim1sec(i+m*20,j+m*20+l-1);
+            end
+        end
+        ARlm(m,l) = 1/(20*(20-l))*sum(sum(prod(:,:)));
+        prod = 0;
+    end
+end
+figure
+imagesc(ARlm);
+title('AR on the variation of rhythm patterns')
+color map
+color bar
+
