@@ -3,8 +3,7 @@ function [ output ] = NPCP( wav,fs,fftSize,window,Threshold)
         % PART 2 : processing of the audio vector In the Fourier domain.
         %_________________________________________________________
         %
-        xn = wav(1:fftSize);
-        Y = fft(xn.*window);
+        Y = fft(wav.*window);
         K = fftSize/2+1;
         % L = K-1;
         Xn = abs(Y(1:K));
