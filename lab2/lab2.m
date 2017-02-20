@@ -12,7 +12,7 @@ for fileIndex = 1:12
     [song,fs] = audioread(char(filename(fileIndex)));
     fftSize = 512;
     kw = kaiser(fftSize);
-    % [song,fs] = audioread('track396-electronic.wav');
+%     [song,fs] = audioread('track396-electronic.wav');
     ExtractedSong = (SongExtract(song,24,fs));
     nf = floor(24*fs/(fftSize/2));
     mfcc1 = zeros(40,nf);
@@ -54,7 +54,7 @@ for fileIndex = 1:12
     end
     figure
     plot(B);
-    title(strcat('First Estimate for',filename(fileIndex)));
+    title(strcat('First Estimate for',{' '},filename(fileIndex)));
     xlabel('lag(secs)')
     %gcf stands for get current figure
     saveas(gcf,strcat('FirstEst',int2str(fileIndex),'.png'));
@@ -76,7 +76,7 @@ for fileIndex = 1:12
     end
     figure
     plot(AR)
-    title('A better estimate of Rhythm')
+    title(strcat('A better Estimate for',{' '},filename(fileIndex)));
     xlabel('lag(sec)')
     saveas(gcf,strcat('BetterEst',int2str(fileIndex),'.png'));
 
@@ -84,45 +84,46 @@ for fileIndex = 1:12
     % color as a function of the lag l = 0; : : : ; 19 (y-axis) and the time window index m (x-axis) for the 12
     % tracks. Comment on the variation of rhythm patterns for the dierent tracks.
 
-%     ShortSong = (SongExtract(song,1,fs));
-%     nfs = floor(1*fs/(fftSize/2));
-%     mfcc2 = zeros(40,nfs);
-%     index = 1;
-%     for n = 1:256:(nfs-1)*256
-%         mfcc2(:,index) = mfcc(ShortSong(n:n+fftSize-1),fs,fftSize,kw);
-%         index = index + 1;
-%     end
-% 
-%     Sim1sec = zeros(nfs,nfs);
-% 
-%     for i = 1:nfs
-%         for j = 1:nfs
-%             Sim1sec(i,j) = SimilarityMatrix(mfcc2,i,j);
-%         end
-%     end
-    % figure
-    % imagesc(Sim1sec)
-    % title('Similarity Matrix for 1 seconds')
-    % colormap jet 
-    % colorbar
+    ShortSong = (SongExtract(song,1,fs));
+    nfs = floor(1*fs/(fftSize/2));
+    mfcc2 = zeros(40,nfs);
+    index = 1;
+    for n = 1:256:(nfs-1)*256
+        mfcc2(:,index) = mfcc(ShortSong(n:n+fftSize-1),fs,fftSize,kw);
+        index = index + 1;
+    end
 
-%     prod = zeros(20,20);
-%     for l = 1:20
-%         for m = 1:floor(nfs/20)-1
-%             for i = 1:20
-%                 for j = 1:20-l+1
-%                     prod(i,j) = Sim1sec(i+m*20,j+m*20)*Sim1sec(i+m*20,j+m*20+l-1);
-%                 end
-%             end
-%             ARlm(m,l) = 1/(20*(20-l))*sum(sum(prod(:,:)));
-%             prod = 0;
-%         end
-%     end
+    Sim1sec = zeros(nfs,nfs);
+
+    for i = 1:nfs
+        for j = 1:nfs
+            Sim1sec(i,j) = SimilarityMatrix(mfcc2,i,j);
+        end
+    end
 %     figure
-%     imagesc(ARlm);
-%     title('AR on the variation of rhythm patterns')
-%     color map
-%     color bar
+%     imagesc(Sim1sec)
+%     title('Similarity Matrix for 1 seconds')
+%     colormap jet 
+%     colorbar
+
+    prod = zeros(20,20);
+    for l = 1:20
+        for m = 1:floor(nfs/20)-1
+            for i = 1:20
+                for j = 1:20-l+1
+                    prod(i,j) = Sim1sec(i+m*20,j+m*20)*Sim1sec(i+m*20,j+m*20+l-1);
+                end
+            end
+            ARlm(m,l) = 1/(20*(20-l))*sum(sum(prod(:,:)));
+            prod = 0;
+        end
+    end
+    figure
+    imagesc(ARlm);
+    title(strcat('AR on the variation of rhythm patterns for',{' '},filename(fileIndex)));
+    color map
+    color bar
+    saveas(gcf,strcat('AR',int2str(fileIndex),'.png'));
 
     %-------------------------End of problem 4----------------------------
     % 5. Implement the computation of the Normalized Pitch Class Prole, dened by (18). You will compute
