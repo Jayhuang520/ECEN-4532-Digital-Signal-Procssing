@@ -1,4 +1,4 @@
-clear all;close all;clc;
+% clear all;close all;clc;
 tic
 pathName = 'C:\Users\JayHuang\OneDrive\Documents\CU Boulder\2017 Spring\ECEN 4532\lab 3';
 fileList = dir(fullfile(pathName,'*.wav'));
@@ -10,7 +10,7 @@ fftSize = 512;
 w = hann(fftSize);
 fftSizeC = 2048; 
 gamma = 100;
-NumSec = 240;
+NumSec = 10;
 
 %---------------For the effect of the different length of the song
 % using gamma as 100
@@ -40,44 +40,55 @@ DMFCCavg = zeros(6,6);
 DChromeavg = zeros(6,6);
 %---------Calculate the average matrix---------
 
-for i = 1:25:150
-    for j = 1:25:150
-        i_ = fix(i/25);
-        j_ = fix(j/25);
-        DMFCCavg(i_+1,j_+1) = mean(mean(MfccD(i:i+24,j:j+24)))/625;
-        DChromeavg(i_+1,j_+1) = mean(mean(chromeD(i:i+24,j:j+24)))/625;
-    end
-end
+% for i = 1:25:150
+%     for j = 1:25:150
+%         i_ = fix(i/25);
+%         j_ = fix(j/25);
+%         DMFCCavg(i_+1,j_+1) = mean(mean(MfccD(i:i+24,j:j+24)))/625;
+%         DChromeavg(i_+1,j_+1) = mean(mean(chromeD(i:i+24,j:j+24)))/625;
+%     end
+% end
 
 %gcf get current figure
-figure
-colormap jet
-imagesc(DChromeavg);
-title(strcat('Chrome average dis Number of Sec',{' '},int2str(NumSec)));
-colorbar
-saveas(gcf,strcat('Chrome_average_dis NumSec',int2str(NumSec),'.png'));
+% figure
+% colormap jet
+% imagesc(DChromeavg);
+% title(strcat('Chrome average dis Number of Sec',{' '},int2str(NumSec)));
+% colorbar
+% saveas(gcf,strcat('Chrome_average_dis NumSec',int2str(NumSec),'.png'));
+% 
+% figure
+% colormap jet
+% imagesc(DMFCCavg);
+% title(strcat('MFCC average Number of Sec',{' '},int2str(NumSec)));
+% colorbar
+% saveas(gcf,strcat('MFCC_average NumSec',int2str(NumSec),'.png'));
+% 
+% figure
+% colormap jet
+% colorbar
+% imagesc(MfccD)
+% title(strcat('MFC distance Number of Sec',{' '},int2str(NumSec)));
+% saveas(gcf,strcat('MFC_distance NumSec',int2str(NumSec),'.png'));
+% 
+% 
+% 
+% figure
+% colormap jet
+% colorbar
+% imagesc(chromeD);
+% title(strcat('chrome distance Number of Sec',{' '},int2str(NumSec)));
+% saveas(gcf,strcat('chromedistance',int2str(NumSec),'.png'));
 
-figure
-colormap jet
-imagesc(DMFCCavg);
-title(strcat('MFCC average Number of Sec',{' '},int2str(NumSec)));
-colorbar
-saveas(gcf,strcat('MFCC_average NumSec',int2str(NumSec),'.png'));
-
-figure
-colormap jet
-colorbar
-imagesc(MfccD)
-title(strcat('MFC distance Number of Sec',{' '},int2str(NumSec)));
-saveas(gcf,strcat('MFC_distance NumSec',int2str(NumSec),'.png'));
-
-
-
-figure
-colormap jet
-colorbar
-imagesc(chromeD);
-title(strcat('chrome distance Number of Sec',{' '},int2str(NumSec)));
-saveas(gcf,strcat('chromedistance',int2str(NumSec),'.png'));
+% Assignment
+% 8. Implement a classifier based on the following ingredients, as explained above,
+% • computation of the 12 mfcc coefficients, or 12 Normalized Pitch Class Profile
+% • modified Kullback-Leibler distance d defined by (6)
+% • genre = majority vote among the 5 nearest neighbors
+ConfusionMatrix = zeros(6,6);
+for i = 1:6 %rows are the true genres
+   % columns are the genres classified by my algorithm
+   ConfusionMatrix(i,:) = Classifier(MfccD,i);
+end
 
 toc
