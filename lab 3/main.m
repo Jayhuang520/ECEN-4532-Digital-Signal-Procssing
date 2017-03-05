@@ -121,17 +121,20 @@ end
 % will compute the mean and standard deviation for all the entries in the confusion matrices.
 %Cross validation of the algorithm:
 
+
 p = zeros(6,25);
 total = zeros(6,6);
+%create cell array for average and standard deviation
+RecordMatrix = zeros(10,6);
 for n = 1:10 % start of repeat
     % pass in the 5-fold cross validation
     TestSong = zeros(6,5);
     TrainSong = zeros(6,20);
-%       for k = 1:5
+%     for k = 1:5
         for g = 1:6 %form a set of test songs and training songs
             p(g,:) = randperm(25)+25*(g-1);
             TestSong(g,:) = p(g,1:5);
-            TrainSong(g,:) = p(g,6:25);
+%             TrainSong(g,:) = p(g,6:25);
         end
         %Since we have the distance song already,set all the 
         %test song value to zeros
@@ -145,7 +148,15 @@ for n = 1:10 % start of repeat
               ConfusionCrossMatrix(gen,:) = ClassifierCross(MfccD,p(gen,1:5));
           end
           total = ConfusionCrossMatrix + total;
-%       end
+          RecordMatrix(n,:) = reshape(diag(ConfusionCrossMatrix),1,6);
+%     end
 end  %end of repeat
+
+average = zeros(1,6);
+StandMatrix = zeros(1,6);
+for a = 1:6
+    average = mean(RecordMatrix);
+    StandMatrix = std(RecordMatrix);
+end
 
 toc

@@ -11,6 +11,7 @@ function [d] = distance(mfcc1,mfcc2,gam)
    %----end of fransico's formula-----------%
    % this is a symmetric distance matrix
    %trace function add up the sum of the digonal matrix
+%     d = 1 - exp(-gam/(KL + eps));
     d = 1 - exp(-gam/(KL + eps));
 end
 
