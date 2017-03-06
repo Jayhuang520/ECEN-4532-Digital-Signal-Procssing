@@ -130,7 +130,7 @@ ConfusionMatrix = zeros(6,6);
 p = zeros(6,25);
 total = zeros(6,6);
 % create cell array for average and standard deviation
-RecordMatrix = zeros(10,6);
+% RecordMatrix = zeros(10,6);
 for n = 1:10 % start of repeat
 %     -----------------Version 1--------------------%
     % pass in the 5-fold cross validation
@@ -151,7 +151,7 @@ for n = 1:10 % start of repeat
         MfccD(TestingSet(1,1:30),TestingSet(1,1:30)) = 0;
         ConfusionCrossMatrix = zeros(6,6);
           for gen = 1:6
-              ConfusionCrossMatrix(gen,:) = ClassifierCross(chromeD,p(gen,1:5));
+              ConfusionCrossMatrix(gen,:) = ClassifierCross(MfccD,p(gen,1:5));
           end
           total = ConfusionCrossMatrix + total;
           RecordMatrix(n,:) = reshape(diag(ConfusionCrossMatrix),1,6);
@@ -162,7 +162,39 @@ end
 
 %---------------------End of version 1----------------------------
 
-averageMatirx = total/10;
+%---------------------Version 2------------------
+% RecordMatrix = zeros(10,5,6);
+% for n = 1:10 % start of repeat   
+%     TestSong = zeros(6,5);
+%     TrainSong = zeros(6,20);
+%      for k = 1:5
+%          if k > 1
+%              k1 = k*5-4;
+%          else
+%              k1 = k;
+%          end
+%         for g = 1:6 %form a set of test songs and training songs
+%             p(g,:) = randperm(25)+25*(g-1);
+%             TestSong(g,:) = p(g,k1:k1+4);
+% %             TrainSong(g,:) = p(g,6:25);
+%         end
+%         %Since we have the distance song already,set all the 
+%         %test song value to zeros
+%         i = 1;
+%         indices = zeros(1,30);
+%         %put all indices into a single row of matrix
+%         TestingSet = sort(reshape(TestSong,[1,30]));
+%         MfccD(TestingSet(1,1:30),TestingSet(1,1:30)) = 0;
+%         ConfusionCrossMatrix = zeros(6,6);
+%           for gen = 1:6
+%               ConfusionCrossMatrix(gen,:) = ClassifierCross(MfccD,p(gen,1:5));
+%           end
+%           total = ConfusionCrossMatrix + total;
+%           RecordMatrix(n,k,:) = reshape(diag(ConfusionCrossMatrix),1,6);
+%      end
+% 
+% end  %end of repeat
+averageMatirx = 
 
 average = zeros(1,6);
 StandMatrix = zeros(1,6);
@@ -173,40 +205,6 @@ end
 
 %11. Improve the classifier using support vector machines (SVM).
 %create a empty cell array
-for i = 1:25
-    classname{i} = 'Classical';
-    classname{i+25} = 'Electronic';
-    classname{i+50} = 'Jazz';
-    classname{i+75} = 'metal';
-    classname{i+100} = 'rock';
-    classname{i+125} = 'World';
-end
 
-Mdl = fitcecoc(MfccD,classname);
-%%
-% Display the coding design matrix.
-Mdl.ClassNames
-CodingMat = Mdl.CodingMatrix
-%% 
-% A one-versus-one coding design on three classes yields three binary
-% learners.  Columns of |CodingMat| correspond to learners and rows 
-% correspond to classes.  The class order corresponds to the order
-% in |Mdl.ClassNames|. For example, |CodingMat(:,1)| is |[1; -1; 0]|, and  
-% indicates that the software trains the first SVM binary learner using
-% all observations classified as |'setosa'| and |'versicolor'|.  Since
-% |'setosa'| corresponds to |1|, it is the positive class, and since
-% |'versicolor'| corresponds to |-1|, it is the negative class.
-%%
-% You can access each binary learner using cell indexing and dot notation.
-for i = 1:6
-    Mdl.BinaryLearners{i};                % The first binary learner
-    Mdl.BinaryLearners{i}.SupportVectors % Support vector indices
-end
-%%
-% Compute the in-sample classification error.
-isLoss = resubLoss(Mdl)
-%%
-% The classification error is small, but the classifier might have been
-% overfit.  You can cross validate the classifier using |crossval|.
 
 toc
