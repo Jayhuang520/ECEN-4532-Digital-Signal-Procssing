@@ -1,4 +1,4 @@
-function [ output_args ] = Untitled4( input_args )
+function [ output_args ] = dctmgr(input_image)
 %This is assignment 1:
 %Write the MATLAB function dctmgr that implements the following functionality:
 % (a) it takes an luminance (gray-level) image as an input, divides it into non overlapping 8  8
@@ -15,7 +15,16 @@ function [ output_args ] = Untitled4( input_args )
 % coeff(1,3) = F3(1; 1) ? F2(1; 1),
 % ...
 % where Fi(1; 1) is the zero frequency DCT coefficient of block i.
-
+[y,x] = size(input_image);
+temp = zeros(8,8);
+output = zeros(y,x);
+for yy = 1:8:y
+    for xx = 1:8:x
+        temp = input_image(yy:yy+7,xx:xx+7);
+        output(yy:yy+7,xx:xx+7) = dct2(temp);
+    end
+end
+output_args = 1;
 
 end
 
