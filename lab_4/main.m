@@ -8,6 +8,5 @@ fileName = dir('*.pgm');
 
 f = imread('clown.pgm');
 %figure,imagesc(f, [0 255]),colormap gray,axis square,axis off;
-g = f;
-
-dctmgr(f);
+g = double(f);
+[coeffMat,dctMatrix] = dctmgr(g);
