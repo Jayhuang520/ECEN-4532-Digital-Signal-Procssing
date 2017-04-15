@@ -10,9 +10,7 @@ fileName = dir('*.pgm');
 f = imread('clown.pgm');
 figure,imagesc(f, [0 255]),colormap gray,axis square,axis off;
 lossFactor = 10;
-g = im2double(f);
-[coeffMat,temp] = dctmgr(g,lossFactor);
+% g = im2double(f);
+[coeffMat,temp] = dctmgr(f,lossFactor);
 outputImage = idctmgr(coeffMat,temp,lossFactor);
-outputImage = im2uint8(outputImage);
-
 figure,imagesc(outputImage, [0 255]),colormap gray,axis square,axis off;

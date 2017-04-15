@@ -1,4 +1,4 @@
-function [coeffMat,temp] = dctmgr(input_image)
+function [coeffMat,temp] = dctmgr(input_image,lossFactor)
 %This is assignment 1:
 %Write the MATLAB function dctmgr that implements the following functionality:
 % (a) it takes an luminance (gray-level) image as an input, divides it into non overlapping 8  8
@@ -23,10 +23,11 @@ for yy = 1:8:y
     for xx = 1:8:x
         temp = input_image(yy:yy+7,xx:xx+7);
         dctMat = dct2(temp);
+%         dctMat = quantization(dctMat,lossFactor);
         dctMatrix(yy:yy+7,xx:xx+7) = dctMat;
         %The coefficient matrix:
         coeffMat(:,index) = ZigZag(dctMat);
-        index = index + 1;        
+        index = index + 1;
     end
 end
 temp = coeffMat(1,:);
