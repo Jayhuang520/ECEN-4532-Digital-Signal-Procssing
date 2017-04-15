@@ -8,8 +8,8 @@ fileList = dir(fullfile(pathName,'*.pgm'));
 fileName = dir('*.pgm');
 
 f = imread('clown.pgm');
-figure,imagesc(f, [0 255]),colormap gray,axis square,axis off;
-lossFactor = 10;
+% figure,imagesc(f, [0 255]),colormap gray,axis square,axis off;
+lossFactor = 20;
 g = im2double(f);
 [coeffMat,temp] = dctmgr(g,lossFactor);
 outputImage = idctmgr(coeffMat,temp,lossFactor);
