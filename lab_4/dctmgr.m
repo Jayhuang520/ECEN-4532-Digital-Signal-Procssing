@@ -23,7 +23,7 @@ for yy = 1:8:y
     for xx = 1:8:x
         temp = input_image(yy:yy+7,xx:xx+7);
         dctMat = dct2(temp);
-        dctMat = quantization(dctMat,lossFactor);
+%         dctMat = quantization(dctMat,lossFactor);
         dctMatrix(yy:yy+7,xx:xx+7) = dctMat;
         %The coefficient matrix:
         coeffMat(:,index) = ZigZag(dctMat);
