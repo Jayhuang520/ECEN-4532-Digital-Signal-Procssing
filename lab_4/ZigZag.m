@@ -1,8 +1,11 @@
 function [ outputMatrix ] = ZigZag( inputMatrix )
+%cited from stackoverflow:
+%http://stackoverflow.com/questions/3024939/matrix-zigzag-reordering
+
 %This function will sort a 8x8 matrix into a 64x1 matrix 
 %according to JPEG image compression
 %First indices of elements
-%numel is number of elements in the matrix
+%nu4 matrix
 ind = reshape(1:numel(inputMatrix),size(inputMatrix));
 %flip the matrix left to right. Then use spdiags
 %spdiags will get extract the diagional elements and then 
